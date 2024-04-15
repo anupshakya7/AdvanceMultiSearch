@@ -1,0 +1,4 @@
+SELECT countries.name as country, universities.name as university, courses.name as course, levels.name as levels, courses.intake as intake FROM countries JOIN universities ON countries.id = universities.country JOIN course_university ON universities.id = course_university.university_id JOIN courses ON course_university.course_id = courses.id JOIN course_level ON courses.id = course_level.course_id JOIN levels ON course_level.level_id = levels.id;
+
+// Upto Intake 
+SELECT countries.name as country, universities.name as university, courses.name as course, courses.intake as intake FROM countries JOIN universities ON countries.id = universities.country JOIN course_university ON universities.id = course_university.university_id JOIN courses ON course_university.course_id = courses.id;
