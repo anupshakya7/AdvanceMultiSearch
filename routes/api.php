@@ -19,10 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Search View API 
-Route::prefix('search')->group(function(){
-    Route::get('/university',[SearchController::class,'university'])->name('dropdown.university');
-    Route::get('/course',[SearchController::class,'course'])->name('dropdown.course');
-    Route::get('/intake',[SearchController::class,'intake'])->name('dropdown.intake');
+//Search View API
+Route::prefix('search')->group(function () {
+    Route::get('/university', [SearchController::class,'university'])->name('dropdown.university');
+    Route::get('/course', [SearchController::class,'course'])->name('dropdown.course');
+    Route::get('/intake', [SearchController::class,'intake'])->name('dropdown.intake');
+    Route::get('/main', [SearchController::class,'search'])->name('search.main');
 });
-//Search View API 
+//Search View API
