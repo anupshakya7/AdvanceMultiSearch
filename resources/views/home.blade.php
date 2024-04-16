@@ -203,8 +203,16 @@
                 level:level
             },
             success:function(response){
+                //console.log(response);
                 $('#results').html('');
                 $.each(response.search,function(index,item){
+                    var array = $.parseJSON(item.intake);
+                    var intakes = "";
+                    $.each(array,function(i,item){
+                        intakes += '<span class="badge" style="background-color:#306fad;margin-right:5px;">'+item+'</span>';
+                    });
+
+                    //console.log(intakes);
                     $('#results').append('<div class="col-md-4">\
                     <div class="card p-3 mb-4 shadow text-center equal_height">\
                         <div class="d-flex justify-content-between">\
@@ -220,11 +228,13 @@
                             <h4 class="heading text-uppercase">'+item.university+'<br>\
                                 <h6 class="mt-3 badge text-white p-2" style="background-color:#536bf6;">'+item.course+'</h6>\
                             </h4>\
-                            <br><span class="badge" style="background-color:#306fad;">'+item.intake+'</span></div>\
+                            <br>'+intakes+'</div>\
                     </div>\
                 </div>\
                 ')
                 });
+
+                
                 $(".equal_height").matchHeight();
             }
         })

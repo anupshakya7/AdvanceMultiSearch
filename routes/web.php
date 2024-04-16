@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CustomCourseIntakeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+    Route::get('/courses-intake',[CustomCourseIntakeController::class,'index'])->name('admin.course-intake');
 });
 
 Route::get('/',[HomeController::class,'index'])->name('home');
