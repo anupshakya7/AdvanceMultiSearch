@@ -3,42 +3,48 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Course;
+use App\CourseUniversity;
 use App\Http\Controllers\Controller;
 use App\University;
 use Illuminate\Http\Request;
 
 class CustomCourseIntakeController extends Controller
 {
-    public function index(){
-        $universities = University::select('id','name')->where('status','Published')->get();
-        $courses = Course::select('id','name')->where('status','Published')->get();
+    public function index()
+    {
+        $universities = University::select('id', 'name')->where('status', 'Published')->get();
+        $courses = Course::select('id', 'name')->where('status', 'Published')->get();
 
-        return view('vendor.Voyager.universities.custom-courseintake',compact('universities','courses'));
+        return view('vendor.Voyager.universities.custom-courseintake', compact('universities', 'courses'));
     }
 
-    public function store(Request $request){
-        dd($request->all());
-        $data = [];
+    public function store(Request $request)
+    {
+        $request->validate([
+            'university' => 'required',
+            'course' => 'required',
+            'intake' => 'required'
+        ]);
 
-        //Get the university id
-        $university = $_POST['university'];
+        $university = $request->university;
+        $courses = $request->course;
+        $intakes = $request->intake;
 
-        //Get the arrays of courses and intakes
-        $courses = $_POST['course'];
-        $intakes = $_POST['intake'];
-        dd($intakes);
+        CourseUniversity::where('university_id', $university)->delete();
 
-        for($i=0;$i<count($courses);$i++){
-            $entry = [
-                "_token"=> $_POST['_token'],
-                "university"=>$university,
-                "course"=>$courses[$i],
-                "intake"=>$intakes[$i]
-            ];
-
-            //Add the entry to the $data array
-            $data[] = $entry;
+        foreach($courses as $course) {
+            $intake = json_encode($intakes[$course]);
+            CourseUniversity::create([
+                'university_id' => $university,
+                'course_id' => $course,
+                'intake' => $intake
+            ]);
         }
-        dd($data);
+
+        return redirect()->back()->with([
+            'message'    => "Added Data Successfully",
+            'alert-type' => 'success',
+        ]);
+
     }
 }
