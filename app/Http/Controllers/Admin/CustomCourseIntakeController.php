@@ -15,4 +15,30 @@ class CustomCourseIntakeController extends Controller
 
         return view('vendor.Voyager.universities.custom-courseintake',compact('universities','courses'));
     }
+
+    public function store(Request $request){
+        dd($request->all());
+        $data = [];
+
+        //Get the university id
+        $university = $_POST['university'];
+
+        //Get the arrays of courses and intakes
+        $courses = $_POST['course'];
+        $intakes = $_POST['intake'];
+        dd($intakes);
+
+        for($i=0;$i<count($courses);$i++){
+            $entry = [
+                "_token"=> $_POST['_token'],
+                "university"=>$university,
+                "course"=>$courses[$i],
+                "intake"=>$intakes[$i]
+            ];
+
+            //Add the entry to the $data array
+            $data[] = $entry;
+        }
+        dd($data);
+    }
 }

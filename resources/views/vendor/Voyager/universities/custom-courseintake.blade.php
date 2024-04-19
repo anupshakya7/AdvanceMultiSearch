@@ -15,7 +15,7 @@
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                    <form role="form" class="form-edit-add" action="" method="POST" enctype="multipart/form-data">
+                    <form role="form" class="form-edit-add" action="{{route('admin.course-intake.store')}}" method="POST" enctype="multipart/form-data">
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
@@ -34,28 +34,29 @@
                             <div class="form-group col-md-12">
                                 <label class="control-label" for="university">University</label>
                                 <select class="form-control select2 select2-hidden-accessible" name="university" required>
-                                    <option value="" >Select University</option>
+                                    <option value="">Select University</option>
                                     @foreach($universities as $university)
                                         <option value="{{$university->id}}" >{{$university->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-sm-12">
-                                <button class="btn btn-primary" id="addNewCourseIntake" style="float:right;">Add Courses & Intake</button>
+                                <a href="javascript:;" class="btn btn-primary" id="addNewCourseIntake" style="float:right;">Add Courses & Intake</a>
                             </div>
-                            <div class="courseintakeadd">
+                            <div id="courseintakeadd">
+                                <input type="hidden" id="course_value">
                                 <div class="courseintakecard">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-5">
                                         <label class="control-label" for="course">Course</label>
-                                        <select class="form-control select2 select2-hidden-accessible" name="course" required>
+                                        <select class="form-control select2 select2-hidden-accessible" name="course[]" required>
                                             @foreach ($courses as $course)
                                                 <option value="{{$course->id}}">{{$course->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-5">
                                         <label class="control-label" for="intake">Intake</label>
-                                        <select class="form-control select2 select2-hidden-accessible" multiple name="intake[]">
+                                        <select class="form-control select2 select2-hidden-accessible" multiple name="intake[][]">
                                             <option value="Jan">Jan</option>
                                             <option value="Feb">Feb</option>
                                             <option value="Mar">Mar</option>
@@ -69,6 +70,11 @@
                                             <option value="Nov">Nov</option>
                                             <option value="Dec">Dec</option>
                                         </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="javascript:void(0);" class="remove-entry btn btn-danger" style="margin-top: 25px !important;">                              
+                                            <span data-icon="C" class="icon"></span>       
+                                        </a>
                                     </div>
                                 </div>   
                             </div>
@@ -117,11 +123,20 @@
 </div><!-- /.modal -->
 @stop
 @section('javascript')
+    <script src="{{asset('js/cloneData.js')}}"></script>
     <script>
         $(document).ready(function(){
-            $('#addNewCourseIntake').click(function(e){
-                e.preventDefault();
-            })
+            let course_value = $('#course_value').val();
+            $('#addNewCourseIntake').cloneData({
+                 //container to hold the duplicated form fields
+                 mainContainerId:"courseintakeadd",
+                 cloneContainer:"courseintakecard",
+                 removeButtonClass:"remove-entry",
+                 removeConfirm:true,
+                 removeConfirmMessage:"Are you sure want to delete?",
+                 minLimit:1,
+                 maxLimit:5,
+            });
         });
     </script>
 @stop

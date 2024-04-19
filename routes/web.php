@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     Route::get('/courses-intake',[CustomCourseIntakeController::class,'index'])->name('admin.course-intake');
+    Route::post('/courses-intake',[CustomCourseIntakeController::class,'store'])->name('admin.course-intake.store');
 });
 
 Route::get('/',[HomeController::class,'index'])->name('home');
