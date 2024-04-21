@@ -48,14 +48,16 @@ class CustomCourseIntakeController extends Controller
 
     }
 
-    public function edit($id){
-        $pivotTable = CourseUniversity::where('id',$id)->first();
+    public function edit($id)
+    {
+        $pivotTable = CourseUniversity::where('id', $id)->first();
         $courses = Course::select('id', 'name')->where('status', 'Published')->get();
-        $selectedCourses = Course::select('id', 'name')->where('id',$pivotTable->course_id)->where('status', 'Published')->first();
-        return view('vendor.Voyager.universities.courseintake.edit',compact('id','courses','selectedCourses','pivotTable'));
+        $selectedCourses = Course::select('id', 'name')->where('id', $pivotTable->course_id)->where('status', 'Published')->first();
+        return view('vendor.Voyager.universities.courseintake.edit', compact('id', 'courses', 'selectedCourses', 'pivotTable'));
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $request->validate([
             'course' => 'required',
             'intake' => 'required'
@@ -76,7 +78,13 @@ class CustomCourseIntakeController extends Controller
 
     }
 
-    public function delete($id){
-        dd($id);
+    public function delete(Request $request)
+    {
+        $courseintake = CourseUniversity::find($request->id);
+        $courseintake->delete();
+        return redirect()->back()->with([
+            'message'    => "Deleted Data Successfully",
+            'alert-type' => 'success',
+        ]);
     }
 }
