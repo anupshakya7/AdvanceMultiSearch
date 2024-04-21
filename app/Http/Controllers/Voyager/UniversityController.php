@@ -262,13 +262,17 @@ class UniversityController extends VoyagerBaseController
         // Eagerload Relations
         $this->eagerLoadRelations($dataTypeContent, $dataType, 'read', $isModelTranslatable);
 
+        //Couses and Intake
+        $university = University::find($id);
+        $courses = $university->courses;
+
         $view = 'voyager::bread.read';
 
         if (view()->exists("voyager::$slug.read")) {
             $view = "voyager::$slug.read";
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
+        return Voyager::view($view, compact('courses','dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
     }
 
     //***************************************

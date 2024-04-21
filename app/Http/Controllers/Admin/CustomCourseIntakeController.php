@@ -47,4 +47,36 @@ class CustomCourseIntakeController extends Controller
         ]);
 
     }
+
+    public function edit($id){
+        $pivotTable = CourseUniversity::where('id',$id)->first();
+        $courses = Course::select('id', 'name')->where('status', 'Published')->get();
+        $selectedCourses = Course::select('id', 'name')->where('id',$pivotTable->course_id)->where('status', 'Published')->first();
+        return view('vendor.Voyager.universities.courseintake.edit',compact('id','courses','selectedCourses','pivotTable'));
+    }
+
+    public function update(Request $request){
+        $request->validate([
+            'course' => 'required',
+            'intake' => 'required'
+        ]);
+        $course = $request->course;
+        $intake = json_encode($request->intake);
+
+        $university = CourseUniversity::find($request->id);
+        $university->course_id = $course;
+        $university->intake = $intake;
+        $university->save();
+
+        return redirect()->back()->with([
+            'message'    => "Updated Data Successfully",
+            'alert-type' => 'success',
+        ]);
+
+
+    }
+
+    public function delete($id){
+        dd($id);
+    }
 }
